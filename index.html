@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speech to Text Converter</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@vitalets/google-translate-api"></script>
+</head>
+<body>
+  <div class="container">
+    <h1><span class="mic-icon">🎤</span> Speech to Text Converter</h1>
+    <textarea id="text-output" placeholder="Your speech will appear here..."></textarea>
+
+    <div class="controls">
+      <button id="record-btn"><span id="record-icon">▶️</span></button>
+      <button id="copy-btn">📋 Copy</button>
+      <button id="download-btn">⬇️ Download</button>
+      <select id="language-select">
+        <option value="en" selected>English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+        <option value="ta">Tamil</option>
+      </select>
+    </div>
+
+    <!-- ✅ Keep only this word/character counter -->
+    <div class="counter" id="counter">Words: 0 | Characters: 0</div>
+  </div>
+
+  <!-- ✅ Only one script reference -->
+  <script src="script.js"></script>
+</body>
+</html>
