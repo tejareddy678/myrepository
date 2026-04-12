@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examly Portal | Premium Examination Environment</title>
+    <link rel="stylesheet" href="project.css">
+    <!-- Google Fonts & Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Top Navigation -->
+        <nav class="navbar">
+            <div class="brand">
+                <span class="material-icons brand-icon">security</span>
+                <h1>Examly<span>PRO</span></h1>
+            </div>
+            <div class="exam-status">
+                <span class="badge">SECURE MODE ACTIVE</span>
+                <span class="exam-title">Web Technologies Final Assessment</span>
+            </div>
+            <div class="header-tools">
+                <div class="timer-widget" id="timer-widget">
+                    <span class="material-icons">schedule</span>
+                    <span id="timer">10:00</span>
+                </div>
+                <button class="btn-finish" onclick="confirmSubmit()">Submit Exam</button>
+            </div>
+        </nav>
+
+        <main class="content-container">
+            <!-- Sidebar -->
+            <aside class="side-panel">
+                <!-- Candidate Section -->
+                <div class="card candidate-card">
+                    <div class="profile-stream">
+                        <video id="camera" autoplay muted></video>
+                        <div class="recording-tag">
+                            <span class="dot"></span> LIVE
+                        </div>
+                    </div>
+                    <div class="candidate-info">
+                        <h2>Candidate #2024-001</h2>
+                        <p><span class="material-icons">face</span> Face AI Monitoring</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Grid -->
+                <div class="card navigation-card">
+                    <div class="card-header">
+                        <h3>Question Palette</h3>
+                        <span class="count-badge" id="answered-badge">0/15</span>
+                    </div>
+                    <div class="q-grid" id="sidebar">
+                        <!-- Questions injected here -->
+                    </div>
+                    <div class="q-legend">
+                        <div class="leg-item"><span class="dot active"></span> Current</div>
+                        <div class="leg-item"><span class="dot answered"></span> Done</div>
+                        <div class="leg-item"><span class="dot review"></span> Review</div>
+                        <div class="leg-item"><span class="dot"></span> Empty</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Quiz Area -->
+            <section class="quiz-area">
+                <div class="question-canvas" id="quiz">
+                    <!-- Questions will be injected here via JS -->
+                </div>
+
+                <footer class="action-footer">
+                    <button class="btn-nav btn-secondary" onclick="prevQuestion()">
+                        <span class="material-icons">arrow_back</span> Previous
+                    </button>
+                    <button class="btn-nav btn-warning" onclick="toggleFlag()">
+                        <span class="material-icons">flag</span> Mark for Review
+                    </button>
+                    <button class="btn-nav btn-primary" id="next-btn" onclick="nextQuestion()">
+                        Next Question <span class="material-icons">arrow_forward</span>
+                    </button>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <!-- Confirm Submit Modal -->
+    <div class="modal-root" id="submit-modal">
+        <div class="modal-content">
+            <span class="material-icons modal-icon">info</span>
+            <h2>Submit Examination?</h2>
+            <p>You have answered <strong id="modal-q-count">0</strong> out of 15 questions. Do you want to finalize your submission? This cannot be reversed.</p>
+            <div class="modal-actions">
+                <button class="btn-nav btn-secondary" onclick="closeModal()">Back to Exam</button>
+                <button class="btn-nav btn-primary" onclick="submitExam()">Yes, Submit Final</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="project.js"></script>
+</body>
+
+</html>
