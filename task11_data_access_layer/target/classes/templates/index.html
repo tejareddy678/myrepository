@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Platinum | Registry</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        .page-link {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .page-link:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        .page-link.active {
+            background: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        th a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        th a:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Nexus <span style="font-size: 1rem; vertical-align: middle; padding: 4px 8px; background: var(--primary); border-radius: 6px; color: white;">v11.0</span></h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Advanced Data Access Layer | Spring Data JPA</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Records</div>
+                <div class="stat-value" th:text="${totalItems}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Current Page</div>
+                <div class="stat-value" th:text="${currentPage} + ' / ' + ${totalPages}">1 / 1</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Sort Attribute</div>
+                <div class="stat-value" style="color: var(--primary); font-size: 1.5rem; text-transform: uppercase;" th:text="${sortField}">Name</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <div>
+                <h2 style="font-family: var(--font-display); font-size: 1.5rem;">Database Registry</h2>
+                <p style="color: var(--text-muted); font-size: 0.875rem;">Optimized with Pagination & Sorting</p>
+            </div>
+            <a th:href="@{/showNewStudentForm}" class="btn btn-primary pulse">
+                <i data-lucide="plus-circle"></i>
+                Add New Student
+            </a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+                                Identity <i data-lucide="chevrons-up-down" style="width: 14px;"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/page/' + ${currentPage} + '?sortField=age&sortDir=' + ${reverseSortDir}}">
+                                Age <i data-lucide="chevrons-up-down" style="width: 14px;"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                                Email <i data-lucide="chevrons-up-down" style="width: 14px;"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a th:href="@{'/page/' + ${currentPage} + '?sortField=department&sortDir=' + ${reverseSortDir}}">
+                                Department <i data-lucide="chevrons-up-down" style="width: 14px;"></i>
+                            </a>
+                        </th>
+                        <th style="text-align: right;">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="student : ${listStudents}">
+                        <td>
+                            <div class="student-info">
+                                <span class="student-name" th:text="${student.firstName + ' ' + student.lastName}">John Doe</span>
+                                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.3);" th:text="'UID: #' + ${student.id}">#001</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span style="font-weight: 700; color: var(--secondary);" th:text="${student.age}">20</span>
+                        </td>
+                        <td>
+                            <code th:text="${student.email}" style="color: var(--primary);">john@example.com</code>
+                        </td>
+                        <td>
+                            <span class="department-badge" th:text="${student.department}">Computer Science</span>
+                        </td>
+                        <td>
+                            <div class="actions" style="justify-content: flex-end;">
+                                <a th:href="@{/showFormForUpdate/{id}(id=${student.id})}" class="btn btn-secondary btn-sm" style="padding: 0.5rem 0.75rem;">
+                                    <i data-lucide="edit-3" style="width: 14px;"></i>
+                                </a>
+                                <a th:href="@{/deleteStudent/{id}(id=${student.id})}" class="btn btn-danger btn-sm" style="padding: 0.5rem 0.75rem;"
+                                   onclick="return confirm('Archive record permanently?')">
+                                    <i data-lucide="trash-2" style="width: 14px;"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <a th:if="${currentPage > 1}" 
+               th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" 
+               class="page-link">
+               <i data-lucide="chevron-left"></i>
+            </a>
+            
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${currentPage != i}" 
+                   th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" 
+                   class="page-link" th:text="${i}"></a>
+                <span th:unless="${currentPage != i}" class="page-link active" th:text="${i}"></span>
+            </span>
+
+            <a th:if="${currentPage < totalPages}" 
+               th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" 
+               class="page-link">
+               <i data-lucide="chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
