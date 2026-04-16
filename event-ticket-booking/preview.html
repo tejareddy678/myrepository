@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking Portal - TechNova 2024</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-color: #05070a;
+            --card-bg: rgba(15, 20, 28, 0.7);
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --secondary-glow: rgba(168, 85, 247, 0.5);
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --input-bg: rgba(30, 41, 59, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 0% 0%, var(--primary-glow) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, var(--secondary-glow) 0%, transparent 40%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+        .app-container { width: 100%; max-width: 1000px; padding: 2rem; animation: fadeIn 0.8s ease-out; }
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+        @media (max-width: 768px) { .grid-layout { grid-template-columns: 1fr; } }
+        .event-details-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .event-meta { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+        .meta-item { display: flex; align-items: center; gap: 1rem; color: var(--text-secondary); }
+        .meta-item svg { color: var(--accent-color); }
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            margin-bottom: 1rem;
+        }
+        .booking-form-section h2 { font-size: 1.75rem; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .form-group input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
+        .btn-book {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            margin-top: 1rem;
+        }
+        .btn-book:hover { transform: translateY(-2px); opacity: 0.9; }
+        .btn-book:disabled { background: #334155; cursor: not-allowed; }
+        .error-msg { color: var(--error-color); font-size: 0.8rem; margin-top: 0.4rem; display: block; }
+        .available-tickets {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            text-align: center;
+        }
+        .ticket-count { font-size: 1.5rem; font-weight: 700; color: var(--success-color); }
+        .success-card { text-align: center; animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .success-icon {
+            width: 64px; height: 64px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        .summary-details { background: rgba(255, 255, 255, 0.03); border-radius: 16px; padding: 1.5rem; margin: 2rem 0; text-align: left; }
+        .summary-row {
+            display: flex; justify-content: space-between; margin-bottom: 0.75rem;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 0.75rem;
+        }
+        .summary-row:last-child { border-bottom: none; }
+        .summary-label { color: var(--text-secondary); }
+        .summary-value { font-weight: 600; }
+        .total-row { font-size: 1.25rem; font-weight: 800; color: var(--accent-color); }
+        .btn-reset {
+            background: transparent; color: var(--text-secondary);
+            border: 1px solid var(--border-color); padding: 0.6rem 1rem;
+            border-radius: 10px; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-reset:hover { background: rgba(255, 255, 255, 0.05); color: white; }
+        
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th { text-align: left; padding: 1rem; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); }
+        td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const AdminDashboard = ({ bookings, event, onBack }) => {
+            const totalRevenue = bookings.reduce((sum, b) => sum + (b.tickets * event.price), 0);
+            const totalTicketsSold = bookings.reduce((sum, b) => sum + b.tickets, 0);
+
+            return (
+                <div className="admin-view">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
+                        <h2>Attendee List</h2>
+                        <button onClick={onBack} className="btn-reset">Back to Form</button>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px' }}>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Total Sales</p>
+                            <p style={{ fontSize: '1.2rem', fontWeight: 800 }}>₹{totalRevenue}</p>
+                        </div>
+                        <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px' }}>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Attendees</p>
+                            <p style={{ fontSize: '1.2rem', fontWeight: 800 }}>{bookings.length}</p>
+                        </div>
+                        <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px' }}>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>Tickets Sold</p>
+                            <p style={{ fontSize: '1.2rem', fontWeight: 800 }}>{totalTicketsSold}</p>
+                        </div>
+                    </div>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table>
+                            <thead>
+                                <tr><th>Name</th><th>Email</th><th>Dept</th><th>Tickets</th></tr>
+                            </thead>
+                            <tbody>
+                                {bookings.length === 0 ? <tr><td colSpan="4" style={{ textAlign: 'center' }}>No records yet</td></tr> :
+                                    bookings.map((b, i) => (
+                                        <tr key={i}>
+                                            <td>{b.name}</td>
+                                            <td style={{ fontSize: '0.85rem' }}>{b.email}</td>
+                                            <td><span className="badge" style={{ fontSize: '0.7rem' }}>{b.department}</span></td>
+                                            <td>{b.tickets}</td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const INITIAL_TICKETS = 50;
+            const [event, setEvent] = useState({
+                name: 'TechNova 2024',
+                department: 'Computer Science',
+                date: 'April 25, 2024',
+                time: '10:00 AM',
+                venue: 'Seminar Hall',
+                price: 499,
+                availableTickets: INITIAL_TICKETS
+            });
+            const [bookings, setBookings] = useState([]);
+            const [lastBooking, setLastBooking] = useState(null);
+            const [isBooked, setIsBooked] = useState(false);
+            const [isAdmin, setIsAdmin] = useState(false);
+
+            useEffect(() => {
+                const saved = localStorage.getItem('event_bookings_preview');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    setBookings(parsed);
+                    const sold = parsed.reduce((sum, b) => sum + b.tickets, 0);
+                    setEvent(prev => ({ ...prev, availableTickets: INITIAL_TICKETS - sold }));
+                }
+            }, []);
+
+            useEffect(() => {
+                localStorage.setItem('event_bookings_preview', JSON.stringify(bookings));
+                const sold = bookings.reduce((sum, b) => sum + b.tickets, 0);
+                setEvent(prev => ({ ...prev, availableTickets: INITIAL_TICKETS - sold }));
+            }, [bookings]);
+
+            return (
+                <div className="app-container">
+                    <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
+                        <button onClick={() => setIsAdmin(!isAdmin)} className="btn-reset">
+                            {isAdmin ? 'Booking Mode' : 'Admin Panel'}
+                        </button>
+                    </div>
+                    <div className="glass-card">
+                        {isAdmin ? (
+                            <AdminDashboard bookings={bookings} event={event} onBack={() => setIsAdmin(false)} />
+                        ) : (
+                            !isBooked ? (
+                                <div className="grid-layout">
+                                    <div className="event-details-section">
+                                        <span className="badge">{event.department}</span>
+                                        <h1>{event.name}</h1>
+                                        <div className="event-meta">
+                                            <div className="meta-item"><span>{event.date} | {event.time}</span></div>
+                                            <div className="meta-item"><span>{event.venue}</span></div>
+                                            <div className="meta-item"><span>₹{event.price}</span></div>
+                                        </div>
+                                        <div className="available-tickets">
+                                            <p style={{ color: 'var(--text-secondary)' }}>Tickets Left</p>
+                                            <span className="ticket-count">{event.availableTickets}</span>
+                                        </div>
+                                    </div>
+                                    <div className="booking-form-section">
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault();
+                                            const data = {
+                                                name: e.target.name.value,
+                                                email: e.target.email.value,
+                                                department: e.target.dept.value,
+                                                tickets: parseInt(e.target.tickets.value)
+                                            };
+                                            if (data.name && data.email && data.department && data.tickets > 0 && data.tickets <= event.availableTickets) {
+                                                setBookings([...bookings, data]);
+                                                setLastBooking(data);
+                                                setIsBooked(true);
+                                            }
+                                        }}>
+                                            <div className="form-group"><input name="name" placeholder="Full Name" required /></div>
+                                            <div className="form-group"><input name="email" type="email" placeholder="Email" required /></div>
+                                            <div className="form-group">
+                                                <select name="dept" required>
+                                                    <option value="">Select Dept</option>
+                                                    <option value="CS">Comp Science</option>
+                                                    <option value="IT">Info Tech</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group"><input name="tickets" type="number" defaultValue="1" min="1" max={event.availableTickets} required /></div>
+                                            <button type="submit" className="btn-book" disabled={event.availableTickets === 0}>Book Now</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="success-card">
+                                    <div className="success-icon">✓</div>
+                                    <h2>Booking Confirmed!</h2>
+                                    <div className="summary-details">
+                                        <div className="summary-row"><span>Attendee</span><span>{lastBooking.name}</span></div>
+                                        <div className="summary-row"><span>Tickets</span><span>{lastBooking.tickets}</span></div>
+                                        <div className="summary-row total-row"><span>Total</span><span>₹{lastBooking.tickets * event.price}</span></div>
+                                    </div>
+                                    <button onClick={() => setIsBooked(false)} className="btn-reset">Book More</button>
+                                </div>
+                            )
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
