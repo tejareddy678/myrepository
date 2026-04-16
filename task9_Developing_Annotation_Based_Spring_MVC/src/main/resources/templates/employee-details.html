@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Employee Details</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container" style="max-width: 700px;">
+        <a th:href="@{/employees}" class="back-link">← Back to Dashboard</a>
+        <h1>Employee Profile</h1>
+        
+        <div class="card" th:if="${employee != null}">
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Employee ID</span>
+                    <span class="detail-value" th:text="${employee.id}">#101</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Full Name</span>
+                    <span class="detail-value" th:text="${employee.name}">Alice Johnson</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Department</span>
+                    <span class="detail-value"><span class="badge" th:text="${employee.department}">Engineering</span></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Designation</span>
+                    <span class="detail-value" th:text="${employee.designation}">Senior Architect</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Email Address</span>
+                    <span class="detail-value" th:text="${employee.email}">alice@example.com</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Annual Salary</span>
+                    <span class="detail-value" th:text="${'$' + #numbers.formatDecimal(employee.salary, 0, 'COMMA', 2, 'POINT')}">$125,000.00</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 2rem; text-align: center;">
+                <p style="color: var(--text-muted); font-size: 0.875rem;">This profile is managed via Spring MVC annotation-based configuration.</p>
+            </div>
+        </div>
+        
+        <div class="card" th:if="${employee == null}">
+            <p style="text-align: center; color: var(--text-muted);">Employee not found.</p>
+        </div>
+    </div>
+</body>
+</html>
