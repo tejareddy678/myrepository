@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Admin Login - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero" style="padding-bottom: 0; margin-top: 3rem;">
+            <h1>Admin Portal</h1>
+            <p>Please log in to manage events</p>
+        </section>
+
+        <form th:action="@{/login}" method="post" class="glass-form" style="max-width: 400px;">
+            <div th:if="${param.error}" class="stat-card" style="margin-bottom: 2rem; border-color: #ef4444; color: #ef4444; padding: 0.8rem;">
+                <p>Invalid username or password.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="admin" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Login to Dashboard</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

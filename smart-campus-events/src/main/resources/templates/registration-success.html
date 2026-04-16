@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Success - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero" style="margin-top: 5rem;">
+            <div style="font-size: 5rem; color: #22c55e; margin-bottom: 2rem;">&check;</div>
+            <h1>Registration Successful!</h1>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 1rem auto;">Thank you for registering. We've sent a confirmation email to your university address. We look forward to seeing you at the event!</p>
+            
+            <div style="margin-top: 3rem;">
+                <a th:href="@{/}" class="btn btn-primary" style="padding: 1rem 2rem;">Back to Home</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

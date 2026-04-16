@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Home - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero">
+            <h1>Discover Campus Events</h1>
+            <p>Connect, Learn, and Grow with fellow students</p>
+            
+            <form th:action="@{/}" method="get" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+                <select name="department" class="btn" style="background: var(--card-bg); color: white; border: 1px solid var(--glass-border);">
+                    <option value="">All Departments</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Arts & Science">Arts & Science</option>
+                </select>
+                <select name="type" class="btn" style="background: var(--card-bg); color: white; border: 1px solid var(--glass-border);">
+                    <option value="">All Types</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Seminar">Seminar</option>
+                    <option value="Cultural">Cultural</option>
+                    <option value="Tech Fest">Tech Fest</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </section>
+
+        <section class="event-grid">
+            <div th:each="event : ${events}" class="event-card">
+                <div class="event-image">
+                    <span th:text="${event.type}" style="font-size: 1.2rem; color: var(--accent); font-weight: bold;"></span>
+                </div>
+                <div class="event-content">
+                    <div class="event-category" th:text="${event.department}">DEPARTMENT</div>
+                    <h3 th:text="${event.title}" style="margin-bottom: 0.5rem; font-size: 1.4rem;">Event Title</h3>
+                    <p th:text="${#temporals.format(event.eventDate, 'dd MMM yyyy, HH:mm')}" style="color: var(--text-secondary); margin-bottom: 1rem;"></p>
+                    <p th:text="${event.location}" style="font-size: 0.9rem; margin-bottom: 1.5rem;"><i class="fas fa-map-marker-alt"></i> Location</p>
+                    <a th:href="@{'/events/' + ${event.id}}" class="btn btn-primary" style="width: 100%; text-align: center;">View Details</a>
+                </div>
+            </div>
+            
+            <div th:if="${events.empty}" style="grid-column: 1/-1; text-align: center; padding: 4rem;">
+                <p style="color: var(--text-secondary); font-size: 1.2rem;">No events found matches your criteria.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

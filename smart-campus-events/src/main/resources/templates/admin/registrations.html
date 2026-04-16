@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Attendees - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1 th:text="'Attendees: ' + ${event.title}">Attendees</h1>
+                <p th:text="${registrations.size()} + ' students registered for this event'"></p>
+            </div>
+            <a th:href="@{/admin/dashboard}" class="btn" style="background: rgba(255,255,255,0.1);">&larr; Back to Dashboard</a>
+        </section>
+
+        <section style="background: var(--card-bg); border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--glass-border); margin-top: 3rem;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(255, 255, 255, 0.05); text-align: left;">
+                        <th style="padding: 1.5rem;">Student Name</th>
+                        <th style="padding: 1.5rem;">Email</th>
+                        <th style="padding: 1.5rem;">Student ID</th>
+                        <th style="padding: 1.5rem;">Registration Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="reg : ${registrations}" style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 1.5rem; font-weight: 500;" th:text="${reg.studentName}"></td>
+                        <td style="padding: 1.5rem;" th:text="${reg.studentEmail}"></td>
+                        <td style="padding: 1.5rem;" th:text="${reg.studentId}"></td>
+                        <td style="padding: 1.5rem; color: var(--text-secondary);" th:text="${#temporals.format(reg.registrationTime, 'dd MMM yyyy, HH:mm')}"></td>
+                    </tr>
+                    <tr th:if="${registrations.empty}">
+                        <td colspan="4" style="padding: 3rem; text-align: center; color: var(--text-secondary);">No one has registered for this event yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

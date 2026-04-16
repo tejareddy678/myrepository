@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Register - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero" style="padding-bottom: 0;">
+            <h1>Event Registration</h1>
+            <p>Fill out the form below to secure your spot</p>
+        </section>
+
+        <form th:action="@{'/register/' + ${eventId}}" th:object="${registration}" method="post" class="glass-form">
+            <div th:if="${error}" class="stat-card" style="margin-bottom: 2rem; border-color: #ef4444; color: #ef4444; padding: 1rem;">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="studentName">Full Name</label>
+                <input type="text" th:field="*{studentName}" placeholder="Your Name" required>
+                <div class="error-message" th:if="${#fields.hasErrors('studentName')}" th:errors="*{studentName}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="studentEmail">University Email</label>
+                <input type="email" th:field="*{studentEmail}" placeholder="student@university.edu" required>
+                <div class="error-message" th:if="${#fields.hasErrors('studentEmail')}" th:errors="*{studentEmail}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="studentId">Student ID</label>
+                <input type="text" th:field="*{studentId}" placeholder="S12345" required>
+                <div class="error-message" th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"></div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem;">Confirm Registration</button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a th:href="@{'/events/' + ${eventId}}" style="color: var(--text-secondary); text-decoration: none;">&larr; Back to Event Details</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

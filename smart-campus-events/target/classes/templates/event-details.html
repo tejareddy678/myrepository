@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title th:text="${event.title} + ' - Smart Campus Events'">Event Details</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div style="max-width: 800px; margin: 4rem auto;">
+            <div class="event-card" style="cursor: default; transform: none; box-shadow: none;">
+                <div class="event-image" style="height: 300px;">
+                    <span th:text="${event.type}" style="font-size: 2rem; color: var(--accent); font-weight: bold;"></span>
+                </div>
+                <div class="event-content" style="padding: 3rem;">
+                    <div class="event-category" th:text="${event.department}">DEPARTMENT</div>
+                    <h1 th:text="${event.title}" style="margin-bottom: 1.5rem; font-size: 2.5rem;">Event Title</h1>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;">
+                        <div>
+                            <p style="color: var(--text-secondary); margin-bottom: 0.25rem;">Date & Time</p>
+                            <p th:text="${#temporals.format(event.eventDate, 'EEEE, dd MMMM yyyy, HH:mm')}" style="font-weight: 600;"></p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); margin-bottom: 0.25rem;">Location</p>
+                            <p th:text="${event.location}" style="font-weight: 600;"></p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); margin-bottom: 0.25rem;">Capacity</p>
+                            <p th:text="${event.capacity} + ' Seats'" style="font-weight: 600;"></p>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); margin-bottom: 0.25rem;">Type</p>
+                            <p th:text="${event.type}" style="font-weight: 600;"></p>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 3rem;">
+                        <h3 style="margin-bottom: 1rem; color: var(--accent);">About this Event</h3>
+                        <p th:text="${event.description}" style="line-height: 1.8; color: var(--text-primary);"></p>
+                    </div>
+
+                    <a th:href="@{'/register/' + ${event.id}}" class="btn btn-primary" style="padding: 1rem 2.5rem; font-size: 1.1rem;">Register Now</a>
+                    <a th:href="@{/}" style="margin-left: 2rem; color: var(--text-secondary); text-decoration: none;">&larr; Back to Events</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

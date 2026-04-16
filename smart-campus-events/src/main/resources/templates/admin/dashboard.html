@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: html}">
+<head th:replace="~{layout :: head}">
+    <title>Admin Dashboard - Smart Campus Events</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section class="hero" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Track statistics and manage campus events</p>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <a th:href="@{/admin/registrations}" class="btn" style="background: rgba(255,255,255,0.1);">View All Registrations</a>
+                <a th:href="@{/admin/events/new}" class="btn btn-primary">+ Create New Event</a>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-container" style="margin-top: 3rem;">
+            <div class="stat-card">
+                <p style="color: var(--text-secondary);">Total Events</p>
+                <div class="stat-val" th:text="${events.size()}">0</div>
+            </div>
+            <div th:each="stat : ${registrationStats}" class="stat-card">
+                <p style="color: var(--text-secondary);" th:text="${stat.key}"></p>
+                <div class="stat-val" th:text="${stat.value}">0</div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">Registrations</p>
+            </div>
+        </section>
+
+        <!-- Events Management Table -->
+        <section style="background: var(--card-bg); border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--glass-border); margin-top: 2rem;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(255, 255, 255, 0.05); text-align: left;">
+                        <th style="padding: 1.5rem;">Event Title</th>
+                        <th style="padding: 1.5rem;">Department</th>
+                        <th style="padding: 1.5rem;">Date</th>
+                        <th style="padding: 1.5rem;">Capacity</th>
+                        <th style="padding: 1.5rem;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="event : ${events}" style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 1.5rem;" th:text="${event.title}"></td>
+                        <td style="padding: 1.5rem;" th:text="${event.department}"></td>
+                        <td style="padding: 1.5rem;" th:text="${#temporals.format(event.eventDate, 'dd MMM yyyy')}"></td>
+                        <td style="padding: 1.5rem;" th:text="${event.capacity}"></td>
+                        <td style="padding: 1.5rem;">
+                            <a th:href="@{'/admin/events/' + ${event.id} + '/registrations'}" style="color: var(--accent); text-decoration: none; margin-right: 1.5rem; font-weight: 500;">Attendees</a>
+                            <a th:href="@{'/admin/events/edit/' + ${event.id}}" style="color: var(--text-primary); text-decoration: none; margin-right: 1rem;">Edit</a>
+                            <a th:href="@{'/admin/events/delete/' + ${event.id}}" 
+                               onclick="return confirm('Are you sure you want to delete this event?')"
+                               style="color: #ef4444; text-decoration: none;">Delete</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${events.empty}">
+                        <td colspan="5" style="padding: 3rem; text-align: center; color: var(--text-secondary);">No events found. Start by creating one!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>
